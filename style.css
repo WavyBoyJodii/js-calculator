@@ -45,9 +45,13 @@ body {
 }
 
 .display {
+  display: flex;
+  justify-content: end;
+  align-content: center;
   height: 85px;
   width: 100%;
   background-color: rgb(199, 199, 199, 0.4);
+  font-size: 70px;
 }
 
 .rows {
