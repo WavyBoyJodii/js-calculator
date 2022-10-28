@@ -1,12 +1,16 @@
+html {
+  background: url("img/spaceWallpaper.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   font-family: "Orbitron", sans-serif;
-}
-
-.page {
-  background-image: url("/images/spaceWallpaper.jpg");
-  background-repeat: no-repeat;
 }
 
 #header,
@@ -16,12 +20,100 @@ body {
   margin: auto;
   padding-top: 35px;
   padding-bottom: 35px;
-  font-size: 36px;
+  font-size: 65px;
+  color: white;
 }
 
 #main {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: center;
   margin: 0;
+}
+
+.calculator {
+  height: 75%;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: auto;
+  gap: 10px;
+  padding-bottom: 50px;
+}
+
+.display {
+  height: 85px;
+  width: 100%;
+  background-color: rgb(199, 199, 199, 0.4);
+}
+
+.rows {
+  justify-content: space-between;
+}
+
+button {
+  height: 85px;
+  width: 110px;
+  flex: 1;
+  font-size: 22px;
+}
+
+.clear {
+  width: 100%;
+  background-color: #a9aaac;
+  border: 1px solid #a9aaac;
+  border-radius: 4px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.clear:hover,
+.maths:hover,
+.numbers:hover,
+.equals:hover {
+  cursor: pointer;
+}
+
+.clear:hover,
+.maths:hover {
+  background-color: #898a8b;
+  border: 1px solid #898a8b;
+}
+.numbers {
+  background-color: #f1f3f4;
+  border: 1px solid #f1f3f4;
+  border-radius: 4px;
+}
+
+.numbers:hover {
+  background-color: #bcbebe;
+  border: 1px solid #bcbebe;
+}
+
+.maths {
+  background-color: #a9aaac;
+  border: 1px solid #a9aaac;
+  border-radius: 4px;
+}
+
+.equals {
+  background-color: rgb(0, 0, 0, 0.3);
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  border-radius: 4px;
+  color: white;
+}
+
+.equals:hover {
+  background-color: rgba(226, 226, 226, 0.3);
+  border: 1px solid rgb(226, 226, 226, 0.3);
+  /* color: black; */
+}
+#footer {
+  /* align-self: baseline; */
+  height: 50px;
+  font-size: 50px;
+  /* margin-top: -50px; */
 }
