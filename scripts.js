@@ -21,22 +21,51 @@ const equalsButton = document.querySelector(".equals");
 
 
 let firstValue = [0];
+let runningMaths = [];
 let numberBuilder = [];
 
+let decimalCounter = 0;
+
+let operatorCounter = 0;
 
 display.textContent = firstValue.toString().replace(/,/g,"");
 
-one.addEventListener('click', () => press(1));
-two.addEventListener('click', () => press(2));
-three.addEventListener('click', () => press(3));
-four.addEventListener('click', () => press(4));
-five.addEventListener('click', () => press(5));
-six.addEventListener('click', () => press(6));
-seven.addEventListener('click', () => press(7));
-eight.addEventListener('click', () => press(8));
-nine.addEventListener('click', () => press(9));
-zero.addEventListener('click', () => press(0));
-decimalButton.addEventListener('click', () => pressForDec("."));
+function initCalc() {
+
+    one.addEventListener('click', addPress);
+    two.addEventListener('click', addPress);
+    three.addEventListener('click', addPress);
+    four.addEventListener('click', addPress);
+    five.addEventListener('click', addPress);
+    six.addEventListener('click', addPress);
+    seven.addEventListener('click', addPress);
+    eight.addEventListener('click', addPress);
+    nine.addEventListener('click', addPress);
+    zero.addEventListener('click', addPress);
+    decimalButton.addEventListener('click', addDecPress);
+
+    addButton.addEventListener('click', addPress);
+    subtractButton.addEventListener('click', addPress);
+    multiplyButton.addEventListener('click', addPress);
+    divideButton.addEventListener('click', addPress);
+
+    one.classList.add("numbers-hover");
+    two.classList.add("numbers-hover");
+    three.classList.add("numbers-hover");
+    four.classList.add("numbers-hover");
+    five.classList.add("numbers-hover");
+    six.classList.add("numbers-hover");
+    seven.classList.add("numbers-hover");
+    eight.classList.add("numbers-hover");
+    nine.classList.add("numbers-hover");
+    zero.classList.add("numbers-hover");
+    decimalButton.classList.add("numbers-hover");
+
+    addButton.classList.add("maths-hover");
+    subtractButton.classList.add("maths-hover");
+    multiplyButton.classList.add("maths-hover");
+    divideButton.classList.add("maths-hover");
+}
 
 clearButton.addEventListener('click', () => clearDisplay());
 
@@ -99,17 +128,18 @@ function checkNumLength() {
     if (numberBuilder.length > 21) {
         display.style.fontSize = "15px";
     }
-    if (numberBuilder.length > 36) {
-        one.removeEventListener('click',() => press());
-        two.removeEventListener('click', () => press());
-        three.removeEventListener('click', () => press());
-        four.removeEventListener('click', () => press());
-        five.removeEventListener('click', () => press());
-        six.removeEventListener('click', () => press());
-        seven.removeEventListener('click', () => press());
-        eight.removeEventListener('click', () => press());
-        nine.removeEventListener('click', () => press());
-        zero.removeEventListener('click', () => press());
+    if (numberBuilder.length > 35) {
+        one.removeEventListener('click', addPress);
+        two.removeEventListener('click', addPress);
+        three.removeEventListener('click', addPress);
+        four.removeEventListener('click', addPress);
+        five.removeEventListener('click', addPress);
+        six.removeEventListener('click',addPress);
+        seven.removeEventListener('click',addPress);
+        eight.removeEventListener('click',addPress);
+        nine.removeEventListener('click',addPress);
+        zero.removeEventListener('click',addPress);
+        decimalButton.removeEventListener('click',addDecPress);
         
         one.classList.remove("numbers-hover");
         two.classList.remove("numbers-hover");
@@ -122,17 +152,31 @@ function checkNumLength() {
         nine.classList.remove("numbers-hover");
         zero.classList.remove("numbers-hover");
         decimalButton.classList.remove("numbers-hover");
+        // numTooLong();
     }
 }
 
 function clearDisplay() {
     numberBuilder = [];
     updateDisplay();
+    initCalc();
+    display.style.fontSize = '70px';
     display.textContent = firstValue;
 }
+
+function numTooLong() {
+    numberBuilder = [];
+    updateDisplay();
+    alert("Number Too Long Sorry!");
+    display.textContent = firstValue.toString().replace(/,/g,"");
+}
 function press(x) {
+    if (x === "÷" || x === "*" || x === "+" || x === "-") {
+        operatorCounter++;
+    }
     numberPush(x);
     checkNumLength();
+    checkCounterLength();
     updateDisplay();
 }
 
@@ -144,6 +188,34 @@ function pressForDec(x) {
     decimalButton.classList.remove("numbers-hover");
 }
 
-function removeDecimal() {
-    decimalButton.removeEventListener('click', () => pressForDec());
+function addDecPress() {
+    this.addEventListener('click', pressForDec(`${this.textContent}`));
 }
+
+function addPress() {
+    this.addEventListener('click', press(`${this.textContent}`));
+}
+
+function removeDecimal() {
+    decimalButton.removeEventListener('click', addDecPress);
+}
+
+function removeOperator() {
+    addButton.removeEventListener('click', addPress);
+    subtractButton.removeEventListener('click', addPress);
+    multiplyButton.removeEventListener('click', addPress);
+    divideButton.removeEventListener('click', addPress);
+
+    addButton.classList.remove("maths-hover");
+    subtractButton.classList.remove("maths-hover");
+    multiplyButton.classList.remove("maths-hover");
+    divideButton.classList.remove("maths-hover");
+}
+
+function checkCounterLength() {
+    if (operatorCounter === 1) {
+        removeOperator();
+    }
+}
+
+Window.onload = initCalc();
