@@ -83,8 +83,7 @@ button {
   cursor: pointer;
 }
 
-.clear:hover,
-.maths:hover {
+.clear:hover {
   background-color: #898a8b;
   border: 1px solid #898a8b;
 }
@@ -94,7 +93,7 @@ button {
   border-radius: 4px;
 }
 
-.numbers:hover {
+.numbers-hover:hover {
   background-color: #bcbebe;
   border: 1px solid #bcbebe;
 }
@@ -104,6 +103,10 @@ button {
   border: 1px solid #a9aaac;
   border-radius: 4px;
 }
+.maths-hover:hover {
+  background-color: #898a8b;
+  border: 1px solid #898a8b;
+}
 
 .equals {
   background-color: rgb(0, 0, 0, 0.3);
@@ -112,7 +115,7 @@ button {
   color: white;
 }
 
-.equals:hover {
+.equals-hover:hover {
   background-color: rgba(226, 226, 226, 0.3);
   border: 1px solid rgb(226, 226, 226, 0.3);
   /* color: black; */
