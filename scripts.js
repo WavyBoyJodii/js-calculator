@@ -19,14 +19,18 @@ const multiplyButton = document.getElementById("multiply");
 const divideButton = document.getElementById("divide");
 const equalsButton = document.querySelector(".equals");
 
-
+// initial calculator display
 let firstValue = [0];
+// array for operators and numbers to be operated on
 let runningMaths = [];
+// array for display
 let numberBuilder = [];
 
 let decimalCounter = 0;
 
 let operatorCounter = 0;
+
+let clearCounter = 0;
 
 display.textContent = firstValue.toString().replace(/,/g,"");
 
@@ -44,10 +48,12 @@ function initCalc() {
     zero.addEventListener('click', addPress);
     decimalButton.addEventListener('click', addDecPress);
 
-    addButton.addEventListener('click', addPress);
-    subtractButton.addEventListener('click', addPress);
-    multiplyButton.addEventListener('click', addPress);
-    divideButton.addEventListener('click', addPress);
+    addButton.addEventListener('click', addOperatorPress);
+    subtractButton.addEventListener('click', addOperatorPress);
+    multiplyButton.addEventListener('click', addOperatorPress);
+    divideButton.addEventListener('click', addOperatorPress);
+
+    equalsButton.addEventListener('click', addEqualsPress);
 
     one.classList.add("numbers-hover");
     two.classList.add("numbers-hover");
@@ -67,49 +73,51 @@ function initCalc() {
     divideButton.classList.add("maths-hover");
 }
 
-clearButton.addEventListener('click', () => clearDisplay());
+clearButton.addEventListener('click', () => whichClear());
 
 function add(x,y) {
     let total = x+y;
-    return console.log(total)
+    return total
 }
 
 function subtract(x,y) {
     let total = x-y;
-    return console.log(total)
+    return total
 }
 
 function multiply(x,y) {
     let total = x*y;
-    return console.log(total)
+    return total
 }
 
 function divide(x,y) {
     let total = x/y;
-    return console.log(total)
+    return total
 }
 
 function operate(operater,x,y){
-    let action
     switch (operater) {
         case "+":
-            action = add(x,y);
+            runningMaths.splice(0,3, add(x,y));
             break;
         case "-":
-            action = subtract(x,y);
+            runningMaths.splice(0,3, subtract(x,y));
             break;
         case "*":
-            action = multiply(x,y);
+            runningMaths.splice(0,3, multiply(x,y));
             break;
         case "÷":
-            action = divide(x,y);
+            runningMaths.splice(0,3, divide(x,y));
             break;            
     }
-    return action
 }
 
 function numberPush(x) {
     numberBuilder.push(x)
+}
+
+function operaterPush(x) {
+    runningMaths.push(x);
 }
 
 function updateDisplay() {
@@ -156,12 +164,50 @@ function checkNumLength() {
     }
 }
 
+function checkMathValueLength () {
+    let mathString = runningMaths.toString().replace(/,/g,"")
+    if (mathString.length > 7) {
+        display.style.fontSize = "35px";
+    }
+
+    if (mathString.length > 13) {
+        display.style.fontSize = "25px";
+    }
+
+    if (mathString.length > 21) {
+        display.style.fontSize = "15px";
+    }
+
+    if (mathString.length > 35) {
+        display.style.fontSize = "8px";
+    }
+}
+
+function addToMaths() {
+    runningMaths.push(numberBuilder.toString().replace(/,/g,""));
+}
+
 function clearDisplay() {
     numberBuilder = [];
-    updateDisplay();
+    // updateDisplay();
     initCalc();
+    clearCounter++;
     display.style.fontSize = '70px';
     display.textContent = firstValue;
+}
+
+function fullClear() {
+    numberBuilder = [];
+    runningMaths = [];
+    initCalc();
+    clearCounter = 0;
+    display.style.fontSize = '70px';
+    display.textContent = firstValue;
+}
+
+function whichClear() {
+    (clearCounter === 1) ? fullClear() : clearDisplay();
+
 }
 
 function numTooLong() {
@@ -171,14 +217,37 @@ function numTooLong() {
     display.textContent = firstValue.toString().replace(/,/g,"");
 }
 function press(x) {
-    if (x === "÷" || x === "*" || x === "+" || x === "-") {
-        operatorCounter++;
-    }
     numberPush(x);
     checkNumLength();
-    checkCounterLength();
+    operatorCounter = 0;
     updateDisplay();
 }
+
+function pressOperator(x) {
+    if (numberBuilder.length === 0) {
+        return
+    } else {
+        addToMaths();
+        operatorCounter++;
+        operaterPush(x)
+        checkCounterLength();
+        checkMaths();
+        numberBuilder = [];
+        decimalCounter = 0;
+        display.style.fontSize = '70px';
+        display.textContent = firstValue;
+    }
+}
+
+function pressEquals() {
+    if (runningMaths.length === 1) return
+    if (numberBuilder.length === 0) return
+    addToMaths(); 
+    checkMaths();
+    numberBuilder = [];
+    checkMathValueLength();
+    display.textContent = runningMaths.toString().replace(/,/g,"");
+    }
 
 function pressForDec(x) {
     numberPush(x);
@@ -194,6 +263,13 @@ function addDecPress() {
 
 function addPress() {
     this.addEventListener('click', press(`${this.textContent}`));
+}
+function addOperatorPress() {
+    this.addEventListener('click', pressOperator(`${this.textContent}`));
+}
+
+function addEqualsPress() {
+    this.addEventListener('click', pressEquals(`${this.textContent}`));
 }
 
 function removeDecimal() {
@@ -216,6 +292,13 @@ function checkCounterLength() {
     if (operatorCounter === 1) {
         removeOperator();
     }
+}
+
+function checkMaths() {
+	if (runningMaths.length === 3) {operate(runningMaths[1], runningMaths[0],runningMaths[2])}
+	if (runningMaths.length > 3) {
+	operate(runningMaths[1], runningMaths[0],runningMaths[2])
+	} else return	
 }
 
 Window.onload = initCalc();
