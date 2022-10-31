@@ -32,6 +32,8 @@ let operatorCounter = 0;
 
 let clearCounter = 0;
 
+let equalsCounter = 0;
+
 display.textContent = firstValue.toString().replace(/,/g,"");
 
 function initCalc() {
@@ -76,7 +78,7 @@ function initCalc() {
 clearButton.addEventListener('click', () => whichClear());
 
 function add(x,y) {
-    let total = x+y;
+    let total = Number(x) + Number(y);
     return total
 }
 
@@ -223,20 +225,41 @@ function press(x) {
     updateDisplay();
 }
 
-function pressOperator(x) {
-    if (numberBuilder.length === 0) {
-        return
-    } else {
+// function checkAddMaths () {
+//     if (runningMaths.length === 1 && equalsCounter === 1) return
+//     if (runningMaths.length === 1 && equalsCounter === 0){
+//         runningMaths.splice(0,1);
+//         addToMaths();
+//     }
+
+// }
+
+function checkAddMaths() {
+    if (numberBuilder.length === 0 && runningMaths.length === 1) return
+    if (numberBuilder.length > 0 && runningMaths.length === 1) {
+        runningMaths.splice(0,1);
         addToMaths();
-        operatorCounter++;
-        operaterPush(x)
-        checkCounterLength();
-        checkMaths();
-        numberBuilder = [];
-        decimalCounter = 0;
-        display.style.fontSize = '70px';
-        display.textContent = firstValue;
     }
+    if (numberBuilder.length > 0 && runningMaths.length === 0) {
+        addToMaths();
+    }
+    if (numberBuilder.length > 0 && runningMaths.length > 1) {
+        addToMaths();
+    }
+
+}
+
+function pressOperator(x) {
+    checkAddMaths();
+    operatorCounter++;
+    operaterPush(x)
+    checkCounterLength();
+    checkMaths();
+    numberBuilder = [];
+    decimalCounter = 0;
+    equalsCounter = 0;
+    display.style.fontSize = '70px';
+    display.textContent = runningMaths[0];
 }
 
 function pressEquals() {
@@ -245,6 +268,7 @@ function pressEquals() {
     addToMaths(); 
     checkMaths();
     numberBuilder = [];
+    equalsCounter++;
     checkMathValueLength();
     display.textContent = runningMaths.toString().replace(/,/g,"");
     }
