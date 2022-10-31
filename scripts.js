@@ -194,6 +194,7 @@ function clearDisplay() {
     // updateDisplay();
     initCalc();
     clearCounter++;
+    decimalCounter = 0;
     display.style.fontSize = '70px';
     display.textContent = firstValue;
 }
@@ -203,6 +204,7 @@ function fullClear() {
     runningMaths = [];
     initCalc();
     clearCounter = 0;
+    decimalCounter = 0;
     display.style.fontSize = '70px';
     display.textContent = firstValue;
 }
@@ -259,7 +261,7 @@ function pressOperator(x) {
     decimalCounter = 0;
     equalsCounter = 0;
     display.style.fontSize = '70px';
-    display.textContent = runningMaths[0];
+    roundDecimals();
 }
 
 function pressEquals() {
@@ -269,16 +271,19 @@ function pressEquals() {
     checkMaths();
     numberBuilder = [];
     equalsCounter++;
-    checkMathValueLength();
-    display.textContent = runningMaths.toString().replace(/,/g,"");
-    }
+    decimalCounter = 0;
+    // checkMathValueLength();
+    roundDecimals();
+}
 
 function pressForDec(x) {
+    if (decimalCounter > 0) return
     numberPush(x);
     checkNumLength();
     updateDisplay();
-    removeDecimal();
-    decimalButton.classList.remove("numbers-hover");
+    decimalCounter++;
+    // removeDecimal();
+    // decimalButton.classList.remove("numbers-hover");
 }
 
 function addDecPress() {
@@ -323,6 +328,46 @@ function checkMaths() {
 	if (runningMaths.length > 3) {
 	operate(runningMaths[1], runningMaths[0],runningMaths[2])
 	} else return	
+}
+
+function noInfinity() {
+    if (runningMaths[0] === Infinity || runningMaths[0] === -Infinity) {
+        display.style.fontSize = "30px";
+        display.textContent = "To Infinity And Beyond";
+    } else 
+        display.textContent = runningMaths[0];
+}
+
+
+function roundDecimals() {
+    let char = "."
+    let zeroIndex = runningMaths[0];
+    if (zeroIndex.toString().includes(char)) {
+        let dividedArray = zeroIndex.toString().split(".");
+        let trueInteger = dividedArray[0];
+        if (trueInteger.length < 8) {
+            display.style.fontSize = "70px";
+        }
+        if (trueInteger.length > 7) {
+            display.style.fontSize = "35px";
+        }
+    
+        if (trueInteger.length > 13) {
+            display.style.fontSize = "25px";
+        }
+    
+        if (trueInteger.length > 21) {
+            display.style.fontSize = "15px";
+        }
+    
+        if (trueInteger.length > 35) {
+            display.style.fontSize = "8px";
+        }
+        display.textContent = Number(zeroIndex).toFixed(1);
+    } else {
+        checkMathValueLength();
+        noInfinity();
+    }
 }
 
 Window.onload = initCalc();
